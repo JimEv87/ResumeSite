@@ -1,29 +1,32 @@
+const citymap = {
+  oswestry: {
+    center: { lat: 52.958, lng: -2.622 },
+    population: 350000
+  },
+  
+};
+
 function initMap() {
-  var map = new google.maps.Map(document.getElementById("map"), {
+  // Create the map.
+  const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 6,
-    center: {
-      lat: 52.821868,
-      lng: -2.925709,
-    },
+    center: { lat: 54, lng: -2 },
+    mapTypeId: "terrain"
   });
 
-  var labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-  var locations = [
-    { lat: 52.857769, lng: -3.051070 },
-    { lat: 52.683519, lng: -2.434084 },
-    { lat: 53.050680, lng: -3.011651 },
-  ];
-
-  var markers = locations.map(function (location, i) {
-    return new google.maps.Marker({
-      position: location,
-      label: labels[i % labels.length],
+  // Construct the circle for each value in citymap.
+  // Note: We scale the area of the circle based on the population.
+  for (const city in citymap) {
+    // Add the circle for this city to the map.
+    const cityCircle = new google.maps.Circle({
+      strokeColor: "#FF0000",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: "#FF0000",
+      fillOpacity: 0.35,
+      map,
+      center: citymap[city].center,
+      radius: Math.sqrt(citymap[city].population) * 100
     });
-  });
-
-  var markerCluster = new MarkerClusterer(map, markers, {
-    imagePath:
-      "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
-  });
+  }
 }
